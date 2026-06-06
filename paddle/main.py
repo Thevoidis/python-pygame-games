@@ -30,7 +30,7 @@ class Game :
             self.scene.update()
             self.scene.draw()
             pygame.display.flip()
-            self.clock.tick(120)
+            self.clock.tick(60)
             
             for event in pygame.event.get() :
                 if event.type == pygame.QUIT :
@@ -44,6 +44,10 @@ class Game :
             self.scene.update_savedata()
 
     def load_save(self) :
+        import os
+        if not os.path.exists('saves') :
+            os.mkdir('saves')
+
         import json
         with open('saves/test.save') as savedata :
             savedata = json.load(savedata)

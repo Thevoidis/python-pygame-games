@@ -30,7 +30,7 @@ class Game :
             self.scene.update()
             self.scene.draw()
             pygame.display.flip()
-            self.clock.tick(60)
+            self.clock.tick(120)
             
             for event in pygame.event.get() :
                 if event.type == pygame.QUIT :

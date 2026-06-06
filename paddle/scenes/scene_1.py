@@ -17,12 +17,21 @@ class Scene :
         
         from objects.ball import Ball
         self.balls = []
-        self.balls.append( Ball(game) )
+        self.balls.append( Ball(game,self) )
         self.scene_paused = True
         self.snapshot = pygame.Surface(self.game.screen_size)
 
+        self.initialization_stage = 0
+        if self.game.difficulty_level :
+                self.initialization_stage = 1
+
 
     def update(self) :
+        if self.initialization_stage == 1 :
+            for ball in self.balls :
+                ball.initialize_ball()
+                self.initialization_stage = 2
+
         if (not self.game.difficulty_level) and (not self.difficulty_chooser.enabled) :
             from scenes.welcome_screen import Scene
             self.game.scene = Scene(self.game)
@@ -31,6 +40,15 @@ class Scene :
                 for ball in self.balls :
                     ball.update()
                 self.paddle.update()
+
+        for ball_no in range(len(self.balls)) :
+            if self.balls[ball_no].hitbox.y > ( self.game.screen_size[0] ) :
+                self.balls.pop(ball_no)
+
+        if ( not self.scene_paused ) and (not self.balls) :
+            self.options_screen_enabled = True
+            self.scene_paused = True
+            self.difficulty_chooser.enabled = False
         
 
     def default_handle_event(self,event) :
@@ -94,7 +112,7 @@ class Scene :
         self.balls = []
         from objects.ball import Ball
         for i in range(len(savedata["balls"])) :
-            self.balls.append(Ball(self.game))
+            self.balls.append(Ball(self.game , self))
             self.balls[i].hitbox.x = savedata["balls"][i]["position"][0]
             self.balls[i].hitbox.y = savedata["balls"][i]["position"][1]
             self.balls[i].vel = savedata["balls"][i]["velocity"]
@@ -103,6 +121,8 @@ class Scene :
         self.difficulty_chooser.enabled = False
         self.scene_paused = False
         self.options_screen_enabled = False
+        if self.game.difficulty_level :
+                self.initialization_stage = 1
 
     def handle_gameloop(self) :
         self.paddle.draw()

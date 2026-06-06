@@ -5,7 +5,7 @@ class Scene :
     def __init__(self, parent_scene ,game):
         self.game = game
         self.parent_scene = parent_scene
-        self.welcomeTextRaw = "Options Menu"
+        self.welcomeTextRaw = "     What now ?  "
         self.welcome_text = self.game.title_font.render(
                 self.welcomeTextRaw,
                 True,

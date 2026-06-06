@@ -62,6 +62,8 @@ class Scene :
                         self.parent_scene.game.difficulty_level = self.difficulty_mode_buttons[i].text or None
                         self.parent_scene.difficulty_chooser.enabled = False
                         self.parent_scene.scene_paused = False
+                        if self.parent_scene.game.difficulty_level :
+                            self.parent_scene.initialization_stage = 1
                  
 
             if event.key == pygame.K_UP :

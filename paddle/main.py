@@ -9,9 +9,10 @@ class Game :
         self.screen_size = ( self.screen_info.current_w , self.screen_info.current_h )
         self.difficulty_level = None
         
+        self.FULLSCREEN = True
         self.screen = pygame.display.set_mode(
                 self.screen_size,
-                # pygame.FULLSCREEN
+                pygame.FULLSCREEN
                 )
 
         self.clock = pygame.time.Clock()
@@ -42,6 +43,10 @@ class Game :
     def update_save(self) :
         if hasattr(self.scene,"update_savedata") :
             self.scene.update_savedata()
+
+    def update_resolution(self) :
+        if hasattr(self.scene,"update_resolution") :
+            self.scene.update_resolution()
 
     def load_save(self) :
         import os

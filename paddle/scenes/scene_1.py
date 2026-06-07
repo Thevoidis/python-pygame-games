@@ -49,7 +49,11 @@ class Scene :
             self.options_screen_enabled = True
             self.scene_paused = True
             self.difficulty_chooser.enabled = False
-        
+
+        if self.paddle.hitbox.x > self.game.screen_size[0] - self.paddle.hitbox.width :
+                self.paddle.hitbox.x = self.game.screen_size[0] - self.paddle.hitbox.width
+    
+        self.paddle.hitbox.y = self.game.screen_size[1] - (1.5*self.paddle.hitbox.height)
 
     def default_handle_event(self,event) :
         if event.type == pygame.KEYDOWN :

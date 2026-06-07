@@ -6,7 +6,7 @@ class Scene :
         self.parent_scene = parent_scene
         self.mainrect = pygame.Rect(0,0,
                         self.parent_scene.game.screen_size[0] // 2,
-                        self.parent_scene.game.screen_size[1] // 2
+                        310
                                     )
         self.mainrect.center = (self.parent_scene.game.screen_size[0] // 2,
                         self.parent_scene.game.screen_size[1] // 2)
@@ -21,23 +21,23 @@ class Scene :
 
         self.indian_mode_button = Button(self.parent_scene.game,
                             (self.mainrect.x + 10, self.mainrect.y + 10),
-                            (self.mainrect.width - 20, 100),"Indian",font=self.parent_scene.game.title_font)
+                            (self.mainrect.width - 20, 50),"Indian",font=self.parent_scene.game.default_font)
 
         self.asian_mode_button = Button(self.parent_scene.game,
-                            (self.mainrect.x + 10, self.mainrect.y + 115),
-                            (self.mainrect.width - 20, 100),"Asian",font=self.parent_scene.game.title_font)
+                            (self.mainrect.x + 10, self.mainrect.y + 70),
+                            (self.mainrect.width - 20, 50),"Asian",font=self.parent_scene.game.default_font)
 
         self.hard_mode_button = Button(self.parent_scene.game,
-                            (self.mainrect.x + 10, self.mainrect.y + 220),
-                            (self.mainrect.width - 20, 100),"Hard",font=self.parent_scene.game.title_font)
+                            (self.mainrect.x + 10, self.mainrect.y + 130),
+                            (self.mainrect.width - 20, 50),"Hard",font=self.parent_scene.game.default_font)
 
         self.normal_mode_button = Button(self.parent_scene.game,
-                            (self.mainrect.x + 10, self.mainrect.y + 325),
-                            (self.mainrect.width - 20, 100),"Normal",sel=True,font=self.parent_scene.game.title_font)
+                            (self.mainrect.x + 10, self.mainrect.y + 190),
+                            (self.mainrect.width - 20, 50),"Normal",sel=True,font=self.parent_scene.game.default_font)
 
         self.easy_mode_button = Button(self.parent_scene.game,
-                            (self.mainrect.x + 10, self.mainrect.y + 430),
-                            (self.mainrect.width - 20, 100),"Easy",font=self.parent_scene.game.title_font)
+                            (self.mainrect.x + 10, self.mainrect.y + 250),
+                            (self.mainrect.width - 20, 50),"Easy",font=self.parent_scene.game.default_font)
 
         self.difficulty_mode_buttons = [
                 self.indian_mode_button,

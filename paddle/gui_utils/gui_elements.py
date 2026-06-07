@@ -10,7 +10,6 @@ class Button :
         self.size = size
         self.text = text
         self.game = game
-        self.parent = game.screen
         self.sel = sel
         if font :
             self.font = font
@@ -26,7 +25,7 @@ class Button :
             self.bgcolor = self.unselbgcolor
             self.fgcolor = self.unselfgcolor
 
-        pygame.draw.rect(self.parent,
+        pygame.draw.rect(self.game.screen,
                          self.bgcolor,
                          (self.coords[0],
                          self.coords[1],
@@ -43,4 +42,6 @@ class Button :
         self.coords[0] + self.size[0] // 2,
         self.coords[1] + self.size[1] // 2
     ))
-        self.parent.blit(self.rendered_text,text_rect)
+        self.game.screen.blit(self.rendered_text,text_rect)
+
+

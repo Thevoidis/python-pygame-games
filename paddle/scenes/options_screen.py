@@ -2,10 +2,14 @@ import pygame
 
 from gui_utils.gui_elements import Button
 class Scene :
-    def __init__(self, parent_scene ,game):
+    def __init__(self, parent_scene ,game,welcome_text=""):
         self.game = game
         self.parent_scene = parent_scene
-        self.welcomeTextRaw = "     What now ?  "
+        if not welcome_text :
+            self.welcomeTextRaw = "     What now ?  "
+        else :
+            self.welcomeTextRaw = welcome_text
+
         self.settings_menu_enabled = False
         self.welcome_text = self.game.title_font.render(
                 self.welcomeTextRaw,
@@ -13,7 +17,12 @@ class Scene :
                 (100,150,50)
                 )
         self.selected_main_option = "New Game"
-        self.title_rect = pygame.Rect(self.game.screen_size[0]//3 - 200, 0,400,50)
+        if welcome_text :
+            self.title_rect = self.welcome_text.get_rect()
+            self.title_rect.x = self.game.screen_size[0]//3 - 200
+            self.title_rect.y = 10
+        else :
+            self.title_rect = pygame.Rect(self.game.screen_size[0]//3 - 200, 10,400,50)
         
         # buttons
         self.newgame_button = Button(self.game,

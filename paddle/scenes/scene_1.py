@@ -1,5 +1,6 @@
 import pygame
 import time
+import gui_utils.insults as insults
 
 class Scene :
     def __init__(self,game) :
@@ -147,6 +148,18 @@ class Scene :
                 self.paddle.hitbox.x = self.game.screen_size[0] - self.paddle.hitbox.width
     
         if ( not self.scene_paused ) and (not self.balls) :
+            if self.game.difficulty_level == "Asian" :
+                from scenes.options_screen import Scene as options_screen
+                import random
+                self.options_screen = options_screen(self,self.game,welcome_text=random.choice(insults.asian_insults["death"]))
+            elif self.game.difficulty_level == "Indian" :
+                from scenes.options_screen import Scene as options_screen
+                import random
+                self.options_screen = options_screen(self,self.game,welcome_text="   "+random.choice(insults.asian_insults["death"] + insults.indian_insults["death"])+"  ")
+            else :
+                from scenes.options_screen import Scene as options_screen
+                self.options_screen = options_screen(self,self.game)
+
             self.options_screen_enabled = True
             self.scene_paused = True
             self.difficulty_chooser.enabled = False

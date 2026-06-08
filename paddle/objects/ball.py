@@ -13,7 +13,6 @@ class Ball :
         self.hitbox.center = (random.randint(0, self.game.screen_size[0]) , 0) 
         self.color = (200,200,200)
 
-        print(self.game.difficulty_level)
 
 
         self.delta_t = self.game.clock.tick(60) / 1000.0  # seconds
@@ -55,7 +54,7 @@ class Ball :
 
         elif self.game.difficulty_level == "Asian" :
             self.vel = [random.randint(-50,50), random.randint(1,50)]
-            self.speed = 40
+            self.speed = 30
             self.normalize_speed()
             self.gravity = 30
             self.gravity_enabled = True
@@ -89,7 +88,7 @@ class Ball :
         if self.hitbox.y < 0 :
             self.vel[1] = abs(self.vel[1])
 
-        if self.game.difficulty_level == "Indian" :
+        if self.game.difficulty_level in ["Indian" , "Asian"] :
                 self.vel[0] += random.randint(-10,10)
                 self.vel[1] += random.randint(-10,10)
         self.normalize_speed()
@@ -98,7 +97,7 @@ class Ball :
 
         if self.fireball_timer > 0 :
             import time
-            if ( self.fireball_timer - time.perf_counter() ) > 10 :
+            if ( time.perf_counter() - self.fireball_timer ) > 10 :
                 self.fireball = False
                 self.fireball_timer = 0
                 self.color = (200,200,200)

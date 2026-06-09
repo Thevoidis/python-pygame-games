@@ -19,6 +19,7 @@ class Ball :
         self.initialize_ball()
         self.fireball = False
         self.fireball_timer = 0
+        self.gravity_enabled = True
 
     def normalize_speed(self) :
         self.vel = [ (self.speed*self.vel[0])/( ((self.vel[1]**2)  + (self.vel[0]**2))**(1/2) ) ,
@@ -36,35 +37,30 @@ class Ball :
             self.speed = 20
             self.normalize_speed()
             self.gravity = 4
-            self.gravity_enabled = True
 
         elif self.game.difficulty_level == "Normal" :
             self.vel = [random.randint(-20,20), random.randint(1,20)]
             self.speed = 25
             self.normalize_speed()
             self.gravity = 9.8
-            self.gravity_enabled = True
 
         elif self.game.difficulty_level == "Hard" :
             self.vel = [random.randint(-30,30), random.randint(1,30)]
             self.speed = 30
             self.normalize_speed()
             self.gravity = 9.8
-            self.gravity_enabled = True
 
         elif self.game.difficulty_level == "Asian" :
             self.vel = [random.randint(-50,50), random.randint(1,50)]
             self.speed = 30
             self.normalize_speed()
             self.gravity = 30
-            self.gravity_enabled = True
 
         elif self.game.difficulty_level == "Indian" :
             self.vel = [random.randint(-60,60), random.randint(1,60)]
             self.speed = 60
             self.normalize_speed()
             self.gravity = 40
-            self.gravity_enabled = True
 
 
     def update(self) :

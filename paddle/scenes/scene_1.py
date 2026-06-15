@@ -5,6 +5,7 @@ import gui_utils.insults as insults
 class Scene :
     def __init__(self,game) :
         self.game = game
+        self.dt = game.clock.tick(60) / 1000.0
         self.scene_name = "scenes.scene_1"
         self.scene_type = "Game"
         from scenes.options_screen import Scene as options_screen
@@ -20,7 +21,7 @@ class Scene :
         
         from objects.ball import Ball
         self.balls = []
-        self.balls.append( Ball(game,self) )
+        self.balls.append( Ball(game,self,self.dt) )
         self.scene_paused = True
         self.snapshot = pygame.Surface(self.game.screen_size)
         self.buffs = []
@@ -47,7 +48,7 @@ class Scene :
                 caught_buff = self.buffs.pop(buff)
                 if caught_buff.buff == "Extraball" :
                     from objects.ball import Ball
-                    self.balls.append( Ball(self.game,self) )
+                    self.balls.append( Ball(self.game,self,self.dt) )
                 elif caught_buff.buff == "Fireball" :
                     for ball in self.balls :
                         ball.fireball = True
@@ -115,9 +116,10 @@ class Scene :
             
     
     def update_game(self) :
+                self.dt = self.game.clock.tick(60) / 1000.0
                 ##============ Game Loop========
                 for ball in self.balls :
-                    ball.update()
+                    ball.update(self.dt)
                 for buff in self.buffs :
                     buff.update()
                 self.paddle.update()
@@ -227,7 +229,7 @@ class Scene :
         self.balls = []
         from objects.ball import Ball
         for i in range(len(savedata["balls"])) :
-            self.balls.append(Ball(self.game , self))
+            self.balls.append(Ball(self.game , self,self.dt))
             self.balls[i].hitbox.x = savedata["balls"][i]["position"][0]
             self.balls[i].hitbox.y = savedata["balls"][i]["position"][1]
             self.balls[i].vel = savedata["balls"][i]["velocity"]

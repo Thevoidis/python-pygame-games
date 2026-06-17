@@ -6,10 +6,10 @@ SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Basic Arcade Game"
 
 
-
 class MyGame(arcade.Window):
     def __init__(self):
         super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+        self.screen_size = [ SCREEN_WIDTH ,SCREEN_HEIGHT ]
         from menus.welcome_screen import Scene
         self.scene = Scene(self)
 

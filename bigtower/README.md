@@ -6,7 +6,7 @@ A tower defense game
 
 ## General Plan ;
 
--I think I'll make it a tower defense game with randomly generated maps and routes.
+- I think I'll make it a tower defense game with randomly generated maps and routes.
 - The towers will need to be right clickable(for upgrades and the like), and the ground will also need to be right clickable (for building towers)
 - The enemies will walk through the paths, increasing in strength with the duration of the game
 - Gold will be required to build and upgrade towers, and killing enemies will yield gold.
@@ -26,5 +26,5 @@ In general , the engine's job is to get the position of the towers and to run th
     - units/towers  # Towers
     - units/enemies # Enemies
     - units/base    # Base
-- ui_elements   # These are the game UI elements (accessed by right clicking towers and locations on maps). These are handled separately from menus, and accessing them doesn't pause the game.
-
+- ui_elements/  # These are the game UI elements (accessed by right clicking towers and locations on maps). These are handled separately from menus, and accessing them doesn't pause the game.
+- assets/       # images, sounds, etc

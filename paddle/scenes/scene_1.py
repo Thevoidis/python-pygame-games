@@ -90,7 +90,7 @@ class Scene :
                             k = d
                     min_d = d_list[k]
                     min_d["invert"][1] = int(k>1) or -1
-                    ball.vel[min_d["invert"][0]] = min_d["invert"][1]* abs(ball.vel[min_d["invert"][0]])
+                    ball.vel[min_d["invert"][0]] = min_d["invert"][1]* abs(ball.vel[min_d["invert"][0]] + ball.accel)
                     #========================================================
 
 

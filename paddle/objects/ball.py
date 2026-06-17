@@ -11,12 +11,13 @@ class Ball :
                         2*self.radius,
                         )
         self.parent_scene = parent_scene
-        self.hitbox.center = (random.randint(0, self.game.screen_size[0]) , 0) 
+        self.hitbox.center = (random.randint(0, self.game.screen_size[0]) , random.randint(10,self.game.screen_size[1] //2)) 
         self.color = (200,200,200)
         self.vel = [0,0]
+        self.accel = 100
 
 
-
+        self.dissipation = 0.995
         self.delta_t = dt  # seconds
         self.initialize_ball()
         self.fireball = False
@@ -43,7 +44,7 @@ class Ball :
         pass
 
     def handle_gravity(self) :
-        self.vel[1] += float(self.gravity * self.delta_t) # gravity
+        self.vel[1] += self.gravity * self.delta_t * 10 # gravity
 
     def initialize_ball(self) :
         if self.game.difficulty_level in [None, "Easy"] :
@@ -78,17 +79,18 @@ class Ball :
 
 
     def update(self,dt) :
+        self.vel[1] = self.vel[1] * self.dissipation
         if (self.hitbox.x < 0) :
-            self.vel[0] = abs(self.vel[0] )
+            self.vel[0] = abs(self.vel[0] + self.accel)
 
         elif (self.hitbox.x > (self.game.screen_size[0] - self.hitbox.width) ) :
-            self.vel[0] = -1*abs(self.vel[0] )
+            self.vel[0] = -1*abs(self.vel[0] + self.accel)
 
         self.delta_t = dt  # seconds
 
 
         if self.hitbox.colliderect(self.parent_scene.paddle.hitbox) :
-            self.vel[1] = -1 * abs(self.vel[1]) + random.randint(-1,1)
+            self.vel[1] = -1 * abs(self.vel[1]  + self.accel) + random.randint(-1,1)
             self.vel[0] += random.randint(-1,1)
         
         if self.gravity_enabled :
@@ -103,8 +105,10 @@ class Ball :
 
         if not self.gravity_enabled :
             self.normalize_speed()
+
         self.hitbox.x += self.vel[0]*self.delta_t
         self.hitbox.y += self.vel[1]*self.delta_t
+        
 
         if self.fireball_timer > 0 :
             import time

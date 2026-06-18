@@ -51,6 +51,7 @@ class Scene() :
                                       )
 
             top_pad += item["item"].size[1] + 10
+        self.mainboxitems[0]["item"].sel = True
         self.mainbox.height = top_pad + 10
     def on_draw(self) :
         self.game.screen.blit(

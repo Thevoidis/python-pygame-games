@@ -1,17 +1,20 @@
 import pygame
 
 # Screen settings
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+# SCREEN_WIDTH = 800
+# SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Big Tower"
 
 
 class Game():
     def __init__(self):
         pygame.init()
-        self.screen_size = [ SCREEN_WIDTH ,SCREEN_HEIGHT ]
+        self.screen_info = pygame.display.Info()
+        self.screen_size = [self.screen_info.current_w , self.screen_info.current_h ] 
+        #self.screen_size = [ SCREEN_WIDTH ,SCREEN_HEIGHT ]
         self.screen = pygame.display.set_mode(
                 self.screen_size,
+                pygame.FULLSCREEN
                 )
         self.clock = pygame.time.Clock()
         self.default_font = pygame.font.Font(None, 30)

@@ -1,35 +1,52 @@
-import arcade
+import pygame
 
 # Screen settings
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
-SCREEN_TITLE = "Basic Arcade Game"
+SCREEN_TITLE = "Big Tower"
 
 
-class MyGame(arcade.Window):
+class Game():
     def __init__(self):
-        super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+        pygame.init()
         self.screen_size = [ SCREEN_WIDTH ,SCREEN_HEIGHT ]
+        self.screen = pygame.display.set_mode(
+                self.screen_size,
+                )
+        self.clock = pygame.time.Clock()
+        self.default_font = pygame.font.Font(None, 30)
+        self.title_font = pygame.font.Font( None, 60)
+
         from menus.welcome_screen import Scene
         self.scene = Scene(self)
+        self.running = True
 
 
 
     def on_draw(self):
-        self.clear()
         self.scene.on_draw()
 
-
-    def on_key_press(self, key, modifiers):
-        self.scene.on_key_press(key,modifiers)
-
-    def on_key_release(self, key, modifiers):
-        self.scene.on_key_release(key,modifiers)
 
     def on_update(self, delta_time):
         self.scene.on_update(delta_time)
 
+    def run(self) :
+        self.delta_time = self.clock.tick(60) / 1000.0
+        self.running = True
+        while self.running :
+            self.scene.on_update(self.delta_time)
+            self.scene.on_draw()
+            pygame.display.flip()
+            
+            for event in pygame.event.get() :
+                if event.type == pygame.QUIT :
+                    self.running = False
+                self.scene.handle_event(event)
+
+            self.scene.handle_keypress()
+
 
 if __name__ == "__main__":
-    game = MyGame()
-    arcade.run()
+    game = Game()
+    game.run()
+        

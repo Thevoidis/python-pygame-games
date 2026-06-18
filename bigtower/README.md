@@ -2,6 +2,9 @@
 
 A tower defense game
 
+# Notice :
+shifting the base to pygame from arcade
+
 # Plan :
 
 ## General Plan ;

@@ -17,7 +17,7 @@ class Ball :
         self.accel = 100
 
 
-        self.dissipation = 0.995
+        self.dissipation = 0.9985
         self.delta_t = dt  # seconds
         self.initialize_ball()
         self.fireball = False

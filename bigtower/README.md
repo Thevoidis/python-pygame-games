@@ -11,6 +11,7 @@ A tower defense game
 - The enemies will walk through the paths, increasing in strength with the duration of the game
 - Gold will be required to build and upgrade towers, and killing enemies will yield gold.
 - The towers will have different kinds of firepower, which can also be upgraded and deleted if needed.
+- Samrik says to add a king to the base who can be ejected in an emergency. Ejecting the king means that the player can no longer build or upgrade the towers until the king goes back to base, but the king can move around and attack targets (controlled by the player)
 
 ## The engine :
 In general , the engine's job is to get the position of the towers and to run the scripts attached to each tower. It is also responsible for guiding enemies to the player base.

@@ -3,6 +3,22 @@ import pygame
 from menus.gui_elements import Button
 
 class Scene() :
+    class ButtonList:
+        def __init__(self, buttons):
+            self._list = buttons
+            self._dict = {b["name"] : b for b in buttons}
+
+        def __getitem__(self, key):
+            if isinstance(key, str):
+                return self._dict[key]
+            return self._list[key]
+        
+        def __iter__(self):
+            return iter(self._list)
+
+        def __len__(self):
+            return len(self._list)
+
     def __init__(self,game) :
         self.game = game
         self.background = pygame.image.load("assets/menus/welcom_screen_background.jpg")
@@ -15,25 +31,31 @@ class Scene() :
                 self.mainbox_height
                 )
         
-        self.mainboxitems = [
-                {   
+        self.mainboxitems = self.ButtonList([
+                 {   
                  "name" : "Start Button",
                  "type" : "Button",
                  "text" : "Start New Game"
                  },
 
-                {   
+                 {   
                  "name" : "Load Button",
                  "type" : "Button",
                  "text" : "Load Game"
                  },
             
-                {   
+                 {   
+                 "name" : "Settings Button",
+                 "type" : "Button",
+                 "text" : "Settings"
+                 },
+
+                 {   
                  "name" : "Quit Button",
                  "type" : "Button",
                  "text" : "Quit Game"
                  },
-                ]
+                 ])
         self.init_buttons()
 
     
@@ -47,12 +69,16 @@ class Scene() :
                                     [self.mainbox_width - 20 , button_height],
                                     fgcolor=[(0,0,0),(0,0,0)],
                                     bgcolor=[(100,100,0),(200,200,0)],
-                                    text=item["text"]
+                                    text=item["text"],
+                                    sel=False
                                       )
 
             top_pad += item["item"].size[1] + 10
-        self.mainboxitems[0]["item"].sel = True
+        self.mainboxitems['Start Button']["item"].sel = True
         self.mainbox.height = top_pad + 10
+
+
+
     def on_draw(self) :
         self.game.screen.blit(
                 self.background,
@@ -80,9 +106,45 @@ class Scene() :
                 self.mainbox_height
                 )
 
+
+    def default_handle_event(self,event) :
+        if event.type == pygame.KEYDOWN :
+            if (self.mainboxitems["Quit Button"]["item"].sel) and (event.key == pygame.K_RETURN):
+                self.game.running = False
+    
+            elif (self.mainboxitems["Start Button"]["item"].sel) and (event.key == pygame.K_RETURN):
+                pass
+                # from scenes.scene_1 import Scene
+                # self.game.scene = Scene(self.game)
+
+            elif (self.mainboxitems["Load Button"]["item"].sel) and (event.key == pygame.K_RETURN):
+                pass
+                #self.game.load_save()
+
+            elif (self.mainboxitems["Settings Button"]["item"].sel) and (event.key == pygame.K_RETURN):
+                pass
+                # from scenes.settings_menu import Scene as settings_menu
+                # self.settings_menu = settings_menu(self,self.game)
+                # self.settings_menu_enabled = True
+
+
+            if event.key == pygame.K_UP :
+                for i in range(len(self.mainboxitems)) :
+                    if (self.mainboxitems[i]["item"].sel == True) :
+                        self.mainboxitems[i]["item"].sel = False
+                        self.mainboxitems[ (i-1) % len(self.mainboxitems)]["item"].sel = True
+                        break
+    
+            if event.key == pygame.K_DOWN :
+                for i in range(len(self.mainboxitems)) :
+                    if (self.mainboxitems[i]["item"].sel == True) :
+                        self.mainboxitems[i]["item"].sel = False
+                        self.mainboxitems[ (i+1) % len(self.mainboxitems)]["item"].sel = True
+                        break
+
         
     def handle_event(self,event) :
-        pass
+        self.default_handle_event(event)
 
     def handle_keypress(self) :
         pass

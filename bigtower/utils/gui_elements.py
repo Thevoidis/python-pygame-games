@@ -1,5 +1,22 @@
 import pygame
 
+class namecallableList:
+        def __init__(self, buttons):
+            self._list = buttons
+            self._dict = {b["name"] : b for b in buttons}
+
+        def __getitem__(self, key):
+            if isinstance(key, str):
+                return self._dict[key]
+            return self._list[key]
+        
+        def __iter__(self):
+            return iter(self._list)
+
+        def __len__(self):
+            return len(self._list)
+
+
 class Button :
     def __init__ (self, 
                   game, coords, size, text="" ,

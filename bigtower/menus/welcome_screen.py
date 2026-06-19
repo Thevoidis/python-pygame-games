@@ -1,23 +1,8 @@
 import pygame
 
-from menus.gui_elements import Button
+from utils.gui_elements import Button , namecallableList
 
 class Scene() :
-    class ButtonList:
-        def __init__(self, buttons):
-            self._list = buttons
-            self._dict = {b["name"] : b for b in buttons}
-
-        def __getitem__(self, key):
-            if isinstance(key, str):
-                return self._dict[key]
-            return self._list[key]
-        
-        def __iter__(self):
-            return iter(self._list)
-
-        def __len__(self):
-            return len(self._list)
 
     def __init__(self,game) :
         self.game = game
@@ -31,7 +16,7 @@ class Scene() :
                 self.mainbox_height
                 )
         
-        self.mainboxitems = self.ButtonList([
+        self.mainboxitems = namecallableList([
                  {   
                  "name" : "Start Button",
                  "type" : "Button",

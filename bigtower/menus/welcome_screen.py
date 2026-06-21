@@ -98,8 +98,14 @@ class Scene() :
                 self.game.running = False
     
             elif (self.mainboxitems["Start Button"]["item"].sel) and (event.key == pygame.K_RETURN):
-                from menus.career_menu import Scene
-                self.game.scene = Scene(self.game)
+                from utils.savestate import list_users
+                enlisted_users = list_users()
+                from menus.user_selection import Scene as subscene
+                self.game.subscenes.append(subscene(self.game,enlisted_users,next_scene="menus.career_menu"))
+                
+                if self.game.user :
+                    from menus.career_menu import Scene
+                    self.game.scene = Scene(self.game)
 
             elif (self.mainboxitems["Load Button"]["item"].sel) and (event.key == pygame.K_RETURN):
                 pass

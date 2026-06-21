@@ -29,9 +29,9 @@ import json
 '''
 
 def save_game(savedata) :
-    savedir = pathlib.Path.home() / "Documents"  / "Saves" / savedata["user"] / savedata["campaign"] / savedata["scenario"]
+    savedir = pathlib.Path.home() / "Documents"  / "Saves" / "bigtower" / savedata["user"] / savedata["campaign"] / savedata["scenario"]
     if not savedir.exists() :
-        savedir.mkdir()
+        savedir.mkdir(parents=True)
     if savedir.isdir() :
         k = 0   
         for save in savedir.iterdir() :
@@ -47,9 +47,9 @@ def save_game(savedata) :
 
 
 def load_game(user, campaign, scenario) :
-    savedir =     savedir = pathlib.Path.home() / "Documents"  / "Saves" / user / campaign / scenario
+    savedir =     savedir = pathlib.Path.home() / "Documents"  / "Saves" / "bigtower" / user / campaign / scenario
     if not savedir.exists() :
-        savedir.mkdir()
+        savedir.mkdir(parents=True)
     if savedir.isdir() :
         k = 0   
         for save in savedir.iterdir() :
@@ -62,6 +62,18 @@ def load_game(user, campaign, scenario) :
             savedata = json.load(File)
         return savedata
 
-            
+
+def list_users() :
+    gamesave_dir =     savedir = pathlib.Path.home() / "Documents"  / "Saves" / "bigtower"
+    enlisted_users = []
+    if not gamesave_dir.exists() :
+        gamesave_dir.mkdir(parents=True)
+    for i in gamesave_dir.iterdir() :
+        if ( gamesave_dir / str(i) ).is_dir() :
+            enlisted_users.append(str(i))
+    return enlisted_users or None
+
+
+
 
 

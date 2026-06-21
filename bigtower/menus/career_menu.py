@@ -37,6 +37,11 @@ class Scene() :
                 "text"  : "Back to Main Menu",
                 "item"  : None
                 },
+            {   "name"  : "Change User Button",
+                "type"  : "Button" ,
+                "text"  : "Change User",
+                "item"  : None
+                },
 
             {   "name"  : "Settings Button",
                 "type"  : "Button" ,

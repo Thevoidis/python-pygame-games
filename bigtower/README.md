@@ -5,13 +5,25 @@ A tower defense game
 # Notice :
 shifting the base to pygame from arcade
 
+# Storing Savedata :
+Save data is stored in 
+```
+$HOME/Documents/Saves/bigtower
+```
+in Unix like systems and 
+
+```
+%USERPROFILE%\Documents\Saves\bigtower
+```
+in Windows.
+
 # TODO :
 
 [ ] Make the layout for the career screen (options on the left, stats on the right)
     [ ] Options are : (graphics, back to main menu)
 
 [ ] Make the campaign screen (campaigns levels on the left, upgrades on the right)
-[ ] Figure out how to get mouse click to work on the menus
+[✓] Figure out how to get mouse click to work on the menus
 [ ] Make the options menu (add a recursive stack for layered menus)
 
 # Plan :

@@ -20,7 +20,7 @@ class Scene() :
         import importlib
         sceneLib = importlib.import_module(str(self.next_scene))
         loadedScene = getattr(sceneLib, "Scene")
-        self.game.scene = loadedScene(self)
+        self.game.scene = loadedScene(self.game)
 
 
     def kill(self) :
@@ -29,6 +29,10 @@ class Scene() :
     def default_handle_event(self,event) :
         if event.type == pygame.KEYDOWN :
             if (event.key == pygame.K_ESCAPE):
+                self.kill()
+
+            if (event.key == pygame.K_RETURN) and (self.game.user) :
+                self.on_next_scene()
                 self.kill()
 
     def handle_event(self,event) :
@@ -47,6 +51,7 @@ class Scene() :
                 self.game.screen,
             self.mainbox_color,
             self.mainbox,
+            5
             )
    
 

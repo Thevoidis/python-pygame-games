@@ -100,16 +100,19 @@ class Scene() :
             item["item"].on_draw()
 
 
-
+    def action_main_menu_button_pressed(self) :
+                from menus.welcome_screen import Scene
+                self.game.scene = Scene(self.game)
 
     def on_resize(self) :
         self.background = pygame.transform.scale(self.background,(self.game.screen_size[0], self.game.screen_size[1]))
 
     def default_handle_event(self,event) :
         if event.type == pygame.KEYDOWN :
-            if (self.mainboxitems["Main Menu Button"]["item"].sel) and (event.key == pygame.K_RETURN):
-                from menus.welcome_screen import Scene
-                self.game.scene = Scene(self.game)
+            if (event.key == pygame.K_RETURN):
+                for item in self.mainboxitems :
+                    if (item["item"].sel) and ("function" in item) :
+                            item["function"]()
             
             elif event.key == pygame.K_UP :
                 for i in range(len(self.mainboxitems)) :

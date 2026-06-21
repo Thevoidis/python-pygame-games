@@ -37,6 +37,10 @@ class Button :
         self.text = text
         self.game = game
         self.sel = sel
+        self.rect = pygame.Rect(self.coords[0],
+                         self.coords[1],
+                         self.size[0],
+                         self.size[1] )
         if font :
             self.font = font
         else :
@@ -46,10 +50,7 @@ class Button :
     def on_draw(self) :
         pygame.draw.rect(self.game.screen,
                          self.bgcolor[self.sel],
-                         (self.coords[0],
-                         self.coords[1],
-                         self.size[0],
-                         self.size[1] )
+                         self.rect
                          )
         
         if self.text :

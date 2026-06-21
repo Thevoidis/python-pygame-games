@@ -18,9 +18,10 @@ class Scene() :
         
         self.mainboxitems = namecallableList([
                  {   
-                 "name" : "Start Button",
-                 "type" : "Button",
-                 "text" : "Start New Game"
+                "name" : "Start Button",
+                "type" : "Button",
+                "text" : "Start New Game",
+                "function" : self.action_start_button_pressed
                  },
 
                  {   
@@ -38,12 +39,13 @@ class Scene() :
                  {   
                  "name" : "Quit Button",
                  "type" : "Button",
-                 "text" : "Quit Game"
+                 "text" : "Quit Game",
+                  "function" : quit
                  },
                  ])
         self.init_buttons()
 
-    
+
     def init_buttons(self) :
         top_pad = 0
         button_height = 50
@@ -62,7 +64,14 @@ class Scene() :
         self.mainboxitems['Start Button']["item"].sel = True
         self.mainbox.height = top_pad + 10
 
-
+    def action_start_button_pressed(self):
+                from utils.savestate import list_users
+                enlisted_users = list_users()
+                from menus.user_selection import Scene as subscene
+                self.game.subscenes.append(subscene(self.game,enlisted_users,next_scene="menus.career_menu"))
+                if self.game.user :
+                    from menus.career_menu import Scene
+                    self.game.scene = Scene(self.game)
 
     def on_draw(self) :
         self.game.screen.blit(
@@ -93,29 +102,29 @@ class Scene() :
 
 
     def default_handle_event(self,event) :
+        # Moue events :
+        if event.type == pygame.MOUSEMOTION :
+            for item in self.mainboxitems :
+                if item["item"].rect.collidepoint(event.pos) :
+                    for item2 in self.mainboxitems :
+                        item2["item"].sel = False
+                    item["item"].sel = True
+
+        if event.type == pygame.MOUSEBUTTONUP :
+            for item in self.mainboxitems :
+                if item["item"].rect.collidepoint(event.pos) :
+                    item["item"].sel = True
+                    if "function" in item :
+                        item["function"]()
+
+
+
+        # Keyboard events
         if event.type == pygame.KEYDOWN :
-            if (self.mainboxitems["Quit Button"]["item"].sel) and (event.key == pygame.K_RETURN):
-                self.game.running = False
-    
-            elif (self.mainboxitems["Start Button"]["item"].sel) and (event.key == pygame.K_RETURN):
-                from utils.savestate import list_users
-                enlisted_users = list_users()
-                from menus.user_selection import Scene as subscene
-                self.game.subscenes.append(subscene(self.game,enlisted_users,next_scene="menus.career_menu"))
-                
-                if self.game.user :
-                    from menus.career_menu import Scene
-                    self.game.scene = Scene(self.game)
-
-            elif (self.mainboxitems["Load Button"]["item"].sel) and (event.key == pygame.K_RETURN):
-                pass
-                #self.game.load_save()
-
-            elif (self.mainboxitems["Settings Button"]["item"].sel) and (event.key == pygame.K_RETURN):
-                pass
-                # from scenes.settings_menu import Scene as settings_menu
-                # self.settings_menu = settings_menu(self,self.game)
-                # self.settings_menu_enabled = True
+            if (event.key == pygame.K_RETURN):
+                for item in self.mainboxitems :
+                    if (item["item"].sel) and ("function" in item) :
+                            item["function"]()
 
 
             elif event.key == pygame.K_UP :

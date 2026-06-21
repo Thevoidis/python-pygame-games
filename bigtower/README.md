@@ -7,7 +7,7 @@ shifting the base to pygame from arcade
 
 # TODO :
 
-[ ] Make the layout for the career screen (options on the left, campaigns on the right)
+[ ] Make the layout for the career screen (options on the left, stats on the right)
     [ ] Options are : (graphics, back to main menu)
 
 [ ] Make the campaign screen (campaigns levels on the left, upgrades on the right)

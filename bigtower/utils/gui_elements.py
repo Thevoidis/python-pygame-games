@@ -107,6 +107,7 @@ class InputBox():
         self.pad_x = self.font.size(">>")[0] 
         self.pad_y = 2
         self.d_i = [0, 0]
+        self.scroll_threshold = self.pad_x // 4
         self.rect = pygame.Rect(self.coords[0],
                          self.coords[1],
                          self.size[0],
@@ -115,6 +116,11 @@ class InputBox():
                          self.coords[1],
                          self.size[0] - (2*self.pad_x),
                          self.size[1] )
+        self.prompt = self.font.render(
+                "=>",
+                True,
+                (0,100,0))
+
 
 
     def _set_cursor_from_mouse(self,mouse_x) :
@@ -134,12 +140,24 @@ class InputBox():
             if self.curpos < self.d_i[0] :
                 di0 = self.d_i[0]
                 self.d_i[0] = max(0,self.curpos)
-                self.d_i[1] = self.d_i[1] - (di0 - self.d_i[0])
+                self.d_i[1] = max(0,self.d_i[1] - (di0 - self.d_i[0]))
 
             elif self.curpos > self.d_i[1] :
                 di1 = self.d_i[1]
                 self.d_i[1] = min(self.curpos, len(self.text))
-                self.d_i[0] = self.d_i[0] - (di1 - self.d_i[1])
+                self.d_i[0] = max(0,self.d_i[0] - (di1 - self.d_i[1]))
+
+
+        ccl = self.font.size(self.text[self.d_i[0] : self.curpos])[0] # Current cursor location
+        if (self.inputrect.width - ccl) < self.scroll_threshold  :
+                    self.d_i[0] = max(0,self.d_i[0] + 1)
+                    self.d_i[1] = min(len(self.text),self.d_i[1] + 1)
+
+        if (ccl) < self.scroll_threshold:
+                    self.d_i[0] = max(0,self.d_i[0] - 1)
+                    #self.d_i[1] = min(len(self.text),self.d_i[1] - 1)
+
+
 
 
 
@@ -159,8 +177,6 @@ class InputBox():
             elif event.key == pygame.K_BACKSPACE :
                 self.text = self.text[:max(0,self.curpos - 1)] + self.text[self.curpos:]
                 self.curpos = max(self.curpos-1,0)
-                if (self.d_i[1] - self.d_i[0]) < 2 :
-                    self.d_i[0] = max(0,self.d_i[0] - 1)
             
 
             self.adjust_input_text_width()
@@ -178,14 +194,17 @@ class InputBox():
                          self.rect
                          )
 
+        # Border
+        pygame.draw.rect(self.game.screen,
+                         (200,200,200),
+                         self.rect,
+                         2
+                         )
+
         # Prompt
 
         self.game.screen.blit(
-                self.font.render(
-                "=>",
-                True,
-                (0,100,0)),
-
+                self.prompt,
                 self.rect)
 
 

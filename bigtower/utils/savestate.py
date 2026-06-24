@@ -70,8 +70,20 @@ def list_users() :
         gamesave_dir.mkdir(parents=True)
     for i in gamesave_dir.iterdir() :
         if ( gamesave_dir / str(i) ).is_dir() :
-            enlisted_users.append(str(i))
-    return enlisted_users or None
+            enlisted_users.append(str(i.name))
+    return enlisted_users or []
+
+
+def create_user(user : str) :
+    gamesave_dir =     savedir = pathlib.Path.home() / "Documents"  / "Saves" / "bigtower"
+    if not gamesave_dir.exists() :
+        gamesave_dir.mkdir(parents=True)
+   
+    user_dir = gamesave_dir / user
+    
+    if not user_dir.exists() :
+        user_dir.mkdir(parents=True)
+
 
 
 

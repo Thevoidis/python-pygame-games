@@ -1,11 +1,11 @@
 import pygame
-from utils.gui_elements import namecallableList , InputBox
+from utils.gui_elements import namecallableList , InputBox , ListBox
 
 class Scene() :
     def __init__ (self, game , enlisted_users, next_scene=None) :
         self.game = game
         self.subscene_index = len(game.subscenes)
-        self.enlisted_users = enlisted_users
+        self.enlisted_users = enlisted_users or []
         self.next_scene = next_scene
         self.mainbox_width = self.game.screen_size[0] // 2
         self.mainbox_height = self.game.screen_size[1] // 2
@@ -20,19 +20,31 @@ class Scene() :
             { "name" : "User Input",
                 "type" : "InputBox",
 
-                }
+                },
+            { "name" : "User List",
+                "type" : "ListBox",
+                "list" : self.enlisted_users}
 
             ])
         self.init_menuitems()
 
 
     def init_menuitems(self) :
+        pad_y = 10
         for item in self.mainboxitems :
             if item["type"] == "InputBox" :
                 item["item"] = InputBox(self.game,
-                                        [ self.mainbox.x + (self.mainbox.width// 10)  , self.mainbox.y + 10 ],
+                                        [ self.mainbox.x + (self.mainbox.width// 10)  , self.mainbox.y + pad_y ],
                                         [(self.mainbox.width * 8) //10 , "doesn't matter" ],
-                                        font_size=48)
+                                        font_size=48,sel=True)
+                pad_y += item["item"].size[1]
+            elif item["type"] == "ListBox" :
+                item["item"] = ListBox(self.game,
+                                    [ self.mainbox.x + (self.mainbox.width// 10)  , self.mainbox.y + pad_y ],
+                                        [(self.mainbox.width * 8) //10 , self.mainbox.height - self.mainboxitems["User Input"]["item"].size[1] ],
+                                        item["list"], sel=True
+                                       )
+                pad_y += self.mainboxitems["User Input"]["item"].size[1]
 
     def on_next_scene(self) :
         import importlib
@@ -49,15 +61,29 @@ class Scene() :
             if (event.key == pygame.K_ESCAPE):
                 self.kill()
 
-            if (event.key == pygame.K_RETURN) and (self.mainboxitems["User Input"]["item"].sel):
+            if (event.key == pygame.K_RETURN):
                 if self.mainboxitems["User Input"]["item"].text :
                     self.game.user = self.mainboxitems["User Input"]["item"].text
-                    self.on_next_scene()
+                    from utils.savestate import create_user
+                    create_user(self.game.user)
+                    if self.next_scene :
+                        self.on_next_scene()
                     self.kill()
 
         for item in self.mainboxitems :
             if ("item" in item) and (item["item"].sel) :
                 item["item"].handle_event(event)
+ 
+        if event.type == pygame.KEYDOWN :
+            if (event.key in [pygame.K_UP,pygame.K_DOWN]):
+                self.mainboxitems["User Input"]["item"].text = self.mainboxitems["User List"]["item"].sel_text
+                self.mainboxitems["User Input"]["item"].d_i = [0, 
+                                        min( 
+                                            len(self.mainboxitems["User Input"]["item"].text) ,
+                                            (self.mainboxitems["User Input"]["item"].rect.width // self.mainboxitems["User Input"]["item"].font.size("A")[0]) - 1
+                                            )]
+                self.mainboxitems["User Input"]["item"].curpos = self.mainboxitems["User Input"]["item"].d_i[1]
+                
 
     def handle_event(self,event) :
         self.default_handle_event(event)

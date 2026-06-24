@@ -22,15 +22,12 @@ class namecallableList:
             self._dict[item["name"]] = item
 
 class Button :
-    def __init__ (self, 
-                  game, coords, size, text="" ,
-                  fgcolor=None, 
-                  bgcolor=None,
+    def __init__ (  self, 
+                    game, coords, size, text="" ,
+                    fgcolor=[(0,0,0),(0,0,0)],
+                    bgcolor=[(100,100,100),(150,150,150)],
                     sel=False , font=None) :
-        if not fgcolor :
-            fgcolor = [(0,0,0),(0,0,0)]
-        if not bgcolor :
-            bgcolor = [(100,100,100),(150,150,150)]
+
         self.bgcolor = bgcolor
         self.fgcolor = fgcolor
         self.coords = coords
@@ -89,7 +86,7 @@ the cursor is forced to be inside of d_index
 class InputBox():
     def __init__(self, game, coords, size,
                  fgcolor=[(150,150,150),(250,250,250)], bgcolor=[(0,0,0),(0,0,0)], 
-                 sel=True, font=None,font_size=0) :
+                 sel=False, font=None,font_size=0) :
         self.coords = coords
         self.game = game
         self.curpos = 0 # index of where the cursor is in the string
@@ -180,7 +177,7 @@ class InputBox():
             
 
             self.adjust_input_text_width()
-            print(self.text , self.curpos, self.d_i)
+            #print(self.text , self.curpos, self.d_i)
 
 
 
@@ -225,5 +222,92 @@ class InputBox():
                 (cursor_x , self.inputrect.y + self.inputrect.height - self.pad_y),
                 2
                 )
+
+
+
+class ListBox() :
+    def __init__(self,game,coords,size,
+                    itemlist : list,
+                    max_len=0,
+                    fgcolor=[(0,0,0),(0,0,0)],
+                    bgcolor=[(100,100,100),(150,150,150)],
+                    sel=False) :
+        self.game = game
+        self.fgcolor = fgcolor
+        self.font = self.game.default_font
+        self.bgcolor = bgcolor
+        self.coords = coords
+        self.size = size
+        self.rect = pygame.Rect(self.coords[0],
+                         self.coords[1],
+                         self.size[0],
+                         self.size[1] )
+        self.itemlist = itemlist
+        self.max_len = max_len
+        self.font_height = self.font.size("A")[1]
+        if not self.max_len :
+            self.max_len = ( self.rect.height // self.font_height) - 2
+        self.pad_y = 5
+        self.d_i = [0, min(self.max_len,len(self.itemlist))]
+        self.curr_sel = 0
+        self.sel = sel
+        self.draw_list = []
+        self.setup_draws()
+        self.sel_text = ""
+
+    def setup_draws(self) :
+            self.old_draw_list = self.draw_list
+            self.draw_list = []
+            pad = self.pad_y
+            for item in self.itemlist :
+                self.draw_list.append(
+                        Button(
+                                self.game,
+                                (self.rect.x,self.rect.y + pad),
+                                (self.size[0] , self.font_height),
+                                text=item
+                                ))
+                pad += self.pad_y + self.font_height
+            if len(self.old_draw_list) != len(self.draw_list) :
+                self.d_i = [0, min(self.max_len,len(self.itemlist))]
+                self.curr_sel = 0
+
+            for draw_item in range(len(self.draw_list)) :
+                self.draw_list[draw_item].sel = (draw_item == self.curr_sel)
+            self.old_draw_list = []
+            self.sel_text = self.itemlist[self.curr_sel]
+
+    def default_handle_event(self,event) :
+        if event.type == pygame.KEYDOWN :
+
+
+            # Keybinds
+            if event.key == pygame.K_DOWN :
+                self.curr_sel = min(self.curr_sel + 1, len(self.itemlist)-1)
+                if self.curr_sel > self.d_i[1] :
+                    self.d_i[1] = self.curr_sel
+                    if (self.d_i[1] - self.d_i[0]) > self.max_len :
+                        self.d_i[0] = self.d_i[1] - self.max_len
+            
+            if event.key == pygame.K_UP :
+                self.curr_sel = max(self.curr_sel -1 , 0)
+                if self.curr_sel < self.d_i[0] :
+                    self.d_i[0] = self.curr_sel
+                    if (self.d_i[1] -  self.d_i[0]) > self.max_len :
+                        self.d_i[1] = self.d_i[0] + self.max_len
+
+            # Update if keypress
+            self.setup_draws()
+
+            #print([i.sel for i in self.draw_list],self.curr_sel)
+
+    def handle_event(self,event) :
+        self.default_handle_event(event)
+
+    def on_draw(self) :
+        for draw_item in self.draw_list :
+            draw_item.on_draw()
+        # for item in self.itemlist  :
+            
 
 

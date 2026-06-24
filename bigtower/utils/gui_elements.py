@@ -307,6 +307,13 @@ class ListBox() :
     def on_draw(self) :
         for draw_item in self.draw_list :
             draw_item.on_draw()
+
+        pygame.draw.rect(
+                self.game.screen,
+            (0,0,0),
+            self.rect,
+            5
+            )
         # for item in self.itemlist  :
             
 

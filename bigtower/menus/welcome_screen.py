@@ -21,7 +21,7 @@ class Scene() :
                  {   
                 "name" : "Start Button",
                 "type" : "Button",
-                "text" : "Start New Game",
+                "text" : "Start Game",
                 "function" : self.action_start_button_pressed
                  },
 

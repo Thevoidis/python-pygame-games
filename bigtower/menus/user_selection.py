@@ -1,9 +1,10 @@
 import pygame
-from utils.gui_elements import namecallableList , InputBox , ListBox
+from utils.gui_elements import namecallableList , InputBox , ListBox , Button
 
 class Scene() :
     def __init__ (self, game , enlisted_users, next_scene=None) :
         self.game = game
+        self.background = pygame.image.load("assets/menus/welcom_screen_background_2.jpg")
         self.subscene_index = len(game.subscenes)
         self.enlisted_users = enlisted_users or []
         self.next_scene = next_scene
@@ -16,6 +17,7 @@ class Scene() :
                 self.mainbox_width,
                 self.mainbox_height
                 )
+        self.background = pygame.transform.scale(self.background,(self.mainbox.width, self.mainbox.height))
         self.mainboxitems = namecallableList([
             { "name" : "User Input",
                 "type" : "InputBox",
@@ -27,10 +29,18 @@ class Scene() :
 
             ])
         self.init_menuitems()
+        self.titleprompt = "Enter User Name"
+        self.rendered_title = Button(self.game,
+                                     [ self.mainbox.x ,self.mainbox.y - self.game.title_font.size(self.titleprompt)[1]],
+                                     list(self.game.title_font.size(self.titleprompt)),
+                                     text=self.titleprompt,
+                                     font = pygame.font.Font(None,36)
+                                     )
 
 
     def init_menuitems(self) :
-        pad_y = 10
+        pad_y_init = 10
+        pad_y = pad_y_init
         for item in self.mainboxitems :
             if item["type"] == "InputBox" :
                 item["item"] = InputBox(self.game,
@@ -41,9 +51,10 @@ class Scene() :
             elif item["type"] == "ListBox" :
                 item["item"] = ListBox(self.game,
                                     [ self.mainbox.x + (self.mainbox.width// 10)  , self.mainbox.y + pad_y ],
-                                        [(self.mainbox.width * 8) //10 , self.mainbox.height - self.mainboxitems["User Input"]["item"].size[1] ],
+                                        [(self.mainbox.width * 8) //10 , self.mainbox.height - (pad_y - pad_y_init) - self.mainboxitems["User Input"]["item"].size[1] ],
                                         item["list"], sel=True
                                        )
+                item["item"].curr_sel = -1
                 pad_y += self.mainboxitems["User Input"]["item"].size[1]
 
     def on_next_scene(self) :
@@ -97,6 +108,11 @@ class Scene() :
 
 
     def on_draw(self) :
+        self.rendered_title.on_draw()
+        self.game.screen.blit(
+                self.background,
+                (self.mainbox.x,self.mainbox.y)
+                )
         pygame.draw.rect(
                 self.game.screen,
             self.mainbox_color,

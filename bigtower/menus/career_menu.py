@@ -1,4 +1,5 @@
 import pygame
+import json
 from utils.gui_elements import Button , namecallableList
 from utils.savestate import save_game
 
@@ -54,6 +55,7 @@ class Scene() :
             ])
 
         self.init_buttons()
+        self.init_stats_screen()
     
 
 
@@ -74,7 +76,38 @@ class Scene() :
             top_pad += item["item"].size[1] + 10
         self.mainboxitems[0]["item"].sel = True
         self.mainbox.height = top_pad + 10
+    
+    def init_stats_screen(self) : 
+        import pathlib
+        userdir =   pathlib.Path.home() / "Documents"  / "Saves" / "bigtower" / self.game.user
+        stats_file =  userdir / "user_stats.json"
+        if not stats_file.exists() :
+            self.user_stats = {
+                    "Campaigns Cleared" : 0,
+                    "Kills"             : 0
+                    }
+            with open (str(stats_file),'w') as FILE :
+                json.dump(self.user_stats,FILE)
 
+        else :
+            with open (str(stats_file)) as FILE :
+                self.user_stats = json.load(FILE)
+        
+        self.statlines = []
+        self.rendered_stats = []
+        for stat in self.user_stats :
+            self.statlines.append(f"{stat}:{self.user_stats[stat]}")
+            if (len(self.statlines) * self.game.default_font.get_height()) >= (self.framebox.height - 10) :
+                break
+        
+        for statline in self.statlines :
+            self.rendered_stats.append(self.game.default_font.render(statline, True,(0,0,0)))
+            
+
+
+
+
+            
 
     def on_draw(self) :
         self.game.screen.blit(
@@ -98,8 +131,19 @@ class Scene() :
             self.mainbox,
             )
         
+        
         for item in self.mainboxitems :
             item["item"].on_draw()
+
+        # Stats
+        for i, stat in enumerate(self.rendered_stats) :
+            self.game.screen.blit(
+                stat,
+                ( ((self.mainbox.right + self.framebox.right)//3) ,
+                  self.framebox.y + 10 + (i*self.game.default_font.get_height()) )
+                    )
+
+
 
     def action_change_user(self) :
                     from utils.savestate import list_users

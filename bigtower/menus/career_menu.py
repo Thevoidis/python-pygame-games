@@ -93,7 +93,7 @@ class Scene() :
             with open (str(stats_file)) as FILE :
                 self.user_stats = json.load(FILE)
         
-        self.statlines = []
+        self.statlines = [self.game.user[:((2*self.framebox.width) // 3)//(self.game.default_font.size("A")[0])]]
         self.rendered_stats = []
         for stat in self.user_stats :
             self.statlines.append(f"{stat}:{self.user_stats[stat]}")
@@ -142,6 +142,16 @@ class Scene() :
                 ( ((self.mainbox.right + self.framebox.right)//3) ,
                   self.framebox.y + 10 + (i*self.game.default_font.get_height()) )
                     )
+            if self.statlines[i] == self.game.user :
+                pygame.draw.line(self.game.screen, (0,0,0) ,
+                                 (((self.mainbox.right + self.framebox.right)//3),
+                                  self.framebox.y + 5 + ((i+1)*self.game.default_font.get_height())
+                                  ),
+                                 (((self.mainbox.right + self.framebox.right)//3 + self.game.default_font.size(self.game.user)[0]),
+                                  self.framebox.y + 5 + ((i+1)*self.game.default_font.get_height())
+                                  ),
+                                 2
+                                )
 
 
 
@@ -159,6 +169,23 @@ class Scene() :
         self.background = pygame.transform.scale(self.background,(self.game.screen_size[0], self.game.screen_size[1]))
 
     def default_handle_event(self,event) :
+
+        if event.type == pygame.MOUSEMOTION :
+            for item in self.mainboxitems :
+                if item["item"].rect.collidepoint(event.pos) :
+                    for item2 in self.mainboxitems :
+                        item2["item"].sel = False
+                    item["item"].sel = True
+
+        if event.type == pygame.MOUSEBUTTONUP :
+            if event.button == 1 :
+                for item in self.mainboxitems :
+                    if item["item"].rect.collidepoint(event.pos) :
+                        item["item"].sel = True
+                        if "function" in item :
+                            item["function"]()
+
+
         if event.type == pygame.KEYDOWN :
             if (event.key == pygame.K_RETURN):
                 for item in self.mainboxitems :

@@ -259,7 +259,7 @@ class ListBox() :
             self.old_draw_list = self.draw_list
             self.draw_list = []
             pad = self.pad_y
-            for item in self.itemlist :
+            for item in self.itemlist[self.d_i[0]:self.d_i[1]] :
                 self.draw_list.append(
                         Button(
                                 self.game,
@@ -278,6 +278,17 @@ class ListBox() :
             self.sel_text = self.itemlist[self.curr_sel]
 
     def default_handle_event(self,event) :
+
+        if event.type == pygame.MOUSEMOTION :
+            for num , item in enumerate(self.draw_list) :
+                if item.rect.collidepoint(event.pos) :
+                    for item2 in self.draw_list :
+                        item2.sel = False
+                    item.sel = True
+                    self.curr_sel = self.d_i[0] + num
+            self.setup_draws()
+
+
         if event.type == pygame.KEYDOWN :
 
 
@@ -318,3 +329,7 @@ class ListBox() :
             
 
 
+
+class TextBox() :
+    def __init__(self) :
+        pass

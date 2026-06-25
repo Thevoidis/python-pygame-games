@@ -121,11 +121,12 @@ class Scene() :
                     item["item"].sel = True
 
         if event.type == pygame.MOUSEBUTTONUP :
-            for item in self.mainboxitems :
-                if item["item"].rect.collidepoint(event.pos) :
-                    item["item"].sel = True
-                    if "function" in item :
-                        item["function"]()
+            if event.button == 1 :
+                for item in self.mainboxitems :
+                    if item["item"].rect.collidepoint(event.pos) :
+                        item["item"].sel = True
+                        if "function" in item :
+                            item["function"]()
 
 
 

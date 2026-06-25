@@ -67,13 +67,7 @@ class Scene() :
     def kill(self) :
         self.game.subscenes.pop(self.subscene_index) 
 
-    def default_handle_event(self,event) :
-        if event.type == pygame.KEYDOWN :
-            if (event.key == pygame.K_ESCAPE):
-                self.kill()
-
-            if (event.key == pygame.K_RETURN):
-                if self.mainboxitems["User Input"]["item"].text :
+    def action_confirmed(self) :
                     self.game.user = self.mainboxitems["User Input"]["item"].text
                     from utils.savestate import create_user
                     create_user(self.game.user)
@@ -81,19 +75,37 @@ class Scene() :
                         self.on_next_scene()
                     self.kill()
 
+
+    def update_inputbox(self) :
+                self.mainboxitems["User Input"]["item"].text = self.mainboxitems["User List"]["item"].sel_text
+                self.mainboxitems["User Input"]["item"].d_i = [0, 
+                                        min( 
+                    len(self.mainboxitems["User Input"]["item"].text) ,
+                    (self.mainboxitems["User Input"]["item"].rect.width // self.mainboxitems["User Input"]["item"].font.size("A")[0]) - 1
+                                            )]
+                self.mainboxitems["User Input"]["item"].curpos = self.mainboxitems["User Input"]["item"].d_i[1]
+    
+
+    def default_handle_event(self,event) :
+        if event.type == pygame.MOUSEBUTTONUP :
+            if event.button == 1 :
+                self.update_inputbox()
+
+        if event.type == pygame.KEYDOWN :
+            if (event.key == pygame.K_ESCAPE):
+                self.kill()
+
+            if (event.key == pygame.K_RETURN):
+                if self.mainboxitems["User Input"]["item"].text :
+                    self.action_confirmed()
+
         for item in self.mainboxitems :
             if ("item" in item) and (item["item"].sel) :
                 item["item"].handle_event(event)
  
         if event.type == pygame.KEYDOWN :
             if (event.key in [pygame.K_UP,pygame.K_DOWN]):
-                self.mainboxitems["User Input"]["item"].text = self.mainboxitems["User List"]["item"].sel_text
-                self.mainboxitems["User Input"]["item"].d_i = [0, 
-                                        min( 
-                                            len(self.mainboxitems["User Input"]["item"].text) ,
-                                            (self.mainboxitems["User Input"]["item"].rect.width // self.mainboxitems["User Input"]["item"].font.size("A")[0]) - 1
-                                            )]
-                self.mainboxitems["User Input"]["item"].curpos = self.mainboxitems["User Input"]["item"].d_i[1]
+                self.update_inputbox()
                 
 
     def handle_event(self,event) :

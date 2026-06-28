@@ -18,19 +18,21 @@ in Unix like systems and
 in Windows.
 
 # TODO :
-[ ] Make an input field class for the username and other things that you might need
-    # Plan :
-        - render clipped text, only to certain length, but store the whole text
-        - then , in the clipped text, ask pygame for the size of the text before the current selection
-        - render a line primitive right after that from the size you recieved
-        - update the cursor for moving left and right, and also for the mouse cursor (just compare the coords of the mouse cursor and the text )
+
+## Pending
+[ ] Write the engine
+
+[ ] Make a Text Box Class that parses markdown to scrollable text
 
 [ ] Make the layout for the career screen (options on the left, stats on the right)
     [ ] Options are : (graphics, back to main menu)
 
 [ ] Make the campaign screen (campaigns levels on the left, upgrades on the right)
-[✓] Figure out how to get mouse click to work on the menus
 [ ] Make the options menu (add a recursive stack for layered menus)
+
+## Done
+[✓] Figure out how to get mouse click to work on the menus
+[✓] Make an input field class for the username and other things that you might need
 
 # Plan :
 
@@ -45,6 +47,13 @@ in Windows.
 
 ## The engine :
 In general , the engine's job is to get the position of the towers and to run the scripts attached to each tower. It is also responsible for guiding enemies to the player base.
+
+- I will need to make a class of unit, from which all other units are descended from. The engine will affect all units equally. If the unit is able to move, it will move towards the nearest enemy. Also , if it is able to attack, it will attack as soon as it is in range of a valid target.
+
+I still do not know if there is a need for a whole engine for this.
+Depending on how much work is relegated to the engine, it will either be too trivial or too complicated, nothing in between.
+But I guess I will do it anyways.
+also, since we will be dealing with a lot of units, it might be wise to write the engine in C
 
 
 

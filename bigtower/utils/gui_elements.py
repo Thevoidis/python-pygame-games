@@ -330,6 +330,46 @@ class ListBox() :
 
 
 
+
+## Incomplete
 class TextBox() :
-    def __init__(self) :
-        pass
+    def __init__(self,coords,size,text='',font=None) :
+        self.fontname = font
+        self.levelsizes = [ 32 ] + [ (64 - (4*i)) for i in range(9) ]
+        self.fonts = [ None for level in self.levelsizes ]
+        self.coords = coords
+        self.size = size
+        self.text = text
+        self.parse_text()
+
+    def parse_text(self) :
+        self.parsed_text = []
+        for line in self.text.splitlines() :
+            line2 = line.strip()
+            # Decide H level
+            level = len(line2) - len(line2.lstrip('#')) 
+            cleared_line = line2.lstrip('#')
+            if not self.fonts[level] :
+                self.fonts[level] = pygame.font.Font(self.fontname,self.levelsizes[level])
+
+            # Wrap text
+            wrapped_lines = []
+            lines_to_wrap = cleared_line
+            while (self.fonts[level].size(lines_to_wrap)[0] >= self.size[0] ) :
+                wrap_index = ( ( self.size[0] *  len(lines_to_wrap) ) //
+                              self.fonts[level].size(lines_to_wrap)[0] ) - 1
+                wrapped_lines.append(lines_to_wrap[:wrap_index])
+                lines_to_wrap = lines_to_wrap[wrap_index:]
+
+            if lines_to_wrap :
+                wrapped_lines.append(lines_to_wrap)
+            for line in wrapped_lines :
+                self.parsed_text.append(
+                            {
+                            "text" : line,
+                            "level" : level
+                                }
+                        )
+
+        
+
